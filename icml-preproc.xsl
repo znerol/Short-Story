@@ -1,47 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Adobe ICML preprocessor stylesheet
+    ==================================
+
+    Use one of the following xslt processor specific templates to configure
+    extraction and processing of embedded XMP metadata together with content
+    processing in one pass:
+
+    XSLT template for Saxon:
+        <xsl:template name="xmp-extract">
+            <xsl:copy-of xmlns:saxon="http://saxon.sf.net/" select="saxon:parse(string(.))"/>
+        </xsl:template>
+
+        Usage (command line):
+        saxonb-xslt -ext:on -xsl:icml-to-smd-saxon.xsl test-source-1.icml
+
+    XSLT template for php5-xslt:
+        <xsl:template name="xmp-extract">
+            <xsl:copy-of xmlns:php="http://php.net/xsl" select="php:function('my_xml_parser',string(.))"/>
+        </xsl:template>
+
+        Usage:
+        <?php
+            $xsldoc = new DOMDocument();
+            $xsldoc->load('icml-to-smd-php.xsl');
+            $xsltproc = new XSLTProcessor();
+            $xsltproc->importStylesheet($xsldoc);
+
+            function my_xml_parser($text) {
+                $newdoc = new DOMDocument();
+                $newdoc->loadXML($text);
+                return $newdoc;
+            }
+            $xsltproc->registerPHPFunctions('my_xml_parser');
+
+            $xmldoc = new DOMDocument();
+            $xmldoc->load('test-source-1.icml');
+            echo $xsltproc->transformToXml($xmldoc);
+        ?>
+
+    If you want to ignore embedded XMP metadata use an empty template:
+        <xsl:template name="xmp-extract">
+        </xsl:template>
+-->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:exsl="http://exslt.org/common"
     xmlns:saxon="http://saxon.sf.net/"
     xmlns:php="http://php.net/xsl"
-    extension-element-prefixes="exsl saxon php"
+    extension-element-prefixes="exsl"
 >
 
 <!-- entry point matching the root node of an ICML -->
 <xsl:template match="Document">
-    <!-- use exslt to transform the result fragment after applying the
-         templates to convert the funny adobe tree into a usable one into a
-         node-set and apply user templates on it -->
+    <!-- Client stylesheets may define templates which match on our output
+        with the following structure:
+        <body>
+            <x:xmpmeta>
+                <rdf:RDF>
+                    <rdf:Description about="">
+                        <xmp:Created>...</xmp:Created>
+                        ...
+                    </rdf:Description>
+                    ...
+                </rdf:RDF>
+            </x:xmpmeta>
+
+            <p class='ParagraphStyle/Title'>
+                <span='CharacterStyle/$ID/[No character style]'>
+                   Some Title
+                </span>
+            </p>
+
+            <p class='ParagraphStyle/Body'>
+                <span='CharacterStyle/$ID/[No character style]'>Each paragraph of the body resides in exactly one &lt;p&gt;. Guaranteed. Even if some other </span>
+                <span='CharacterStyle/Bold'>character style</span> is applied in the middle of the a paragraph.
+            </p>
+            ...
+        </body>
+
+        In order to enable our clients to operate on the result set, it is
+        necessary to convert that back into a node-set. It is possible to do
+        that by accumulating the document body in a variable and convert its
+        content using exsl:node-set() back to a node set which is selectable
+        in a call to apply-templates.
+    -->
+
     <xsl:variable name="storytemp">
-        <story>
+        <body>
             <xsl:copy-of select="@*"/>
 
-            <!-- Pull in the embedded xmpmeta section. Regrettably neither
-                 XSLT 1.0 nor EXSLT provide a way to parse XML contained in
-                 a CDATA section, thats why we have to fall back on some funny
-                 ways to achieve that:
-                 1. Use saxon:parse if running on saxon
-                 2. Call a PHP function if running under php
-            -->
-            <xsl:variable name="xmpmeta" select="Story/MetadataPacketPreference/Properties/Contents/text()"/>
-            <xsl:choose>
-                <xsl:when test="$xml_parse_method='saxon'">
-                    <xsl:copy-of select="saxon:parse(string($xmpmeta))"/>
-                </xsl:when>
-                <xsl:when test="$xml_parse_method='php'">
-                    <xsl:copy-of select="php:function('icml_preproc_parse_xml',string($xmpmeta))"/>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:message terminate = "yes">
-                        Unknown method <xsl:value-of select="$xml_parse_method"/> specified in parameter xml_parse_method.
-                    </xsl:message>
-                </xsl:otherwise>
-            </xsl:choose>
+            <!-- parse metadata by trying to call external defined xml parsing
+                 method on embedded RDF/XML XMP stuff -->
+            <xsl:for-each select="Story/MetadataPacketPreference/Properties/Contents/text()">
+                <xsl:call-template name="xmp-extract"/>
+            </xsl:for-each>
 
             <!-- iterate over all ParagraphStyleRange tags in the Story -->
             <xsl:for-each select="Story/ParagraphStyleRange">
                 <xsl:call-template name="regroup-paragraph"/>
             </xsl:for-each>
-        </story>
+        </body>
     </xsl:variable>
     <xsl:apply-templates select="exsl:node-set($storytemp)"/>
 </xsl:template>
@@ -50,11 +109,11 @@
 <xsl:template name="regroup-paragraph">
     <xsl:for-each select="CharacterStyleRange/Content[name(following-sibling::*[position()=1]) = 'Br']">
         <!-- put result fragment into a variable -->
-        <parastyle>
-            <!-- copy attributes of ParagraphStyleRange ancestor -->
-            <xsl:copy-of select="ancestor::*[position()=2]/@*"/>
+        <p>
+            <!-- copy AppliedParagraphStyle attribute of ParagraphStyleRange ancestor -->
+            <xsl:attribute name="class" select="ancestor::*[position()=2]/@AppliedParagraphStyle"/>
             <xsl:call-template name="content-backtrack"/>
-        </parastyle>
+        </p>
     </xsl:for-each>
 </xsl:template>
 
@@ -87,12 +146,13 @@
     </xsl:if>
 
     <!-- apply templates on content -->
-    <charstyle>
+    <span>
         <!-- copy attributes of CharacterStyleRange ancestor to the charstyle
              tag -->
-        <xsl:copy-of select="ancestor::*[position()=1]/@*"/>
+        <!-- copy AppliedCharacterStyle attribute of CharacterStyleRange ancestor -->
+        <xsl:attribute name="class" select="ancestor::*[position()=1]/@AppliedCharacterStyle"/>
         <xsl:value-of select="."/>
-    </charstyle>
+    </span>
 </xsl:template>
 
 </xsl:stylesheet>

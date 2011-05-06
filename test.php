@@ -1,17 +1,17 @@
 <?php
-$doc = new DOMDocument();
-$doc->load('test-source-1.icml');
+    $xsldoc = new DOMDocument();
+    $xsldoc->load('icml-to-smd-php.xsl');
+    $xsltproc = new XSLTProcessor();
+    $xsltproc->importStylesheet($xsldoc);
 
-$xslt = new XSLTProcessor(); 
-$XSL = new DOMDocument(); 
-$XSL->load('icml-to-smd.xsl');
-$xslt->importStylesheet( $XSL );
+    function my_xml_parser($text) {
+        $newdoc = new DOMDocument();
+        $newdoc->loadXML($text);
+        return $newdoc;
+    }
+    $xsltproc->registerPHPFunctions('my_xml_parser');
 
-function icml_preproc_parse_xml($text) {
-    $doc = new DOMDocument();
-    $doc->loadXML($text);
-    return $doc;
-}
-$xslt->registerPHPFunctions('icml_preproc_parse_xml');
-
-echo $xslt->transformToXml($doc);
+    $xmldoc = new DOMDocument();
+    $xmldoc->load('test-source-1.icml');
+    echo $xsltproc->transformToXml($xmldoc);
+?>
