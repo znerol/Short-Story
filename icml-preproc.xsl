@@ -119,12 +119,14 @@
          within the last CharacterStyleRange is a Content. If it is, we need
          to treat that also -->
     <xsl:if test="position()=last()">
-        <xsl:for-each select="CharacterStyleRange[position()=last()]/Content[position()=last()]">
-            <p>
-                <!-- copy AppliedParagraphStyle attribute of ParagraphStyleRange ancestor -->
-                <xsl:attribute name="class" select="ancestor::*[position()=2]/@AppliedParagraphStyle"/>
-                <xsl:call-template name="content-backtrack"/>
-            </p>
+        <xsl:for-each select="CharacterStyleRange[position()=last()]/*[position()=last()]">
+            <xsl:if test="name(.) = 'Content'">
+                <p>
+                    <!-- copy AppliedParagraphStyle attribute of ParagraphStyleRange ancestor -->
+                    <xsl:attribute name="class" select="ancestor::*[position()=2]/@AppliedParagraphStyle"/>
+                    <xsl:call-template name="content-backtrack"/>
+                </p>
+            </xsl:if>
         </xsl:for-each>
     </xsl:if>
 </xsl:template>
