@@ -108,13 +108,25 @@
 <!-- tokenize <Content> by <Br> -->
 <xsl:template name="regroup-paragraph">
     <xsl:for-each select="CharacterStyleRange/Content[name(following-sibling::*[position()=1]) = 'Br']">
-        <!-- put result fragment into a variable -->
         <p>
             <!-- copy AppliedParagraphStyle attribute of ParagraphStyleRange ancestor -->
             <xsl:attribute name="class" select="ancestor::*[position()=2]/@AppliedParagraphStyle"/>
             <xsl:call-template name="content-backtrack"/>
         </p>
     </xsl:for-each>
+
+    <!-- if we are in the last ParagraphStyleNode, let's check if the last node
+         within the last CharacterStyleRange is a Content. If it is, we need
+         to treat that also -->
+    <xsl:if test="position()=last()">
+        <xsl:for-each select="CharacterStyleRange[position()=last()]/Content[position()=last()]">
+            <p>
+                <!-- copy AppliedParagraphStyle attribute of ParagraphStyleRange ancestor -->
+                <xsl:attribute name="class" select="ancestor::*[position()=2]/@AppliedParagraphStyle"/>
+                <xsl:call-template name="content-backtrack"/>
+            </p>
+        </xsl:for-each>
+    </xsl:if>
 </xsl:template>
 
 <!-- called within <ParagraphStyleRange>, context is the last <Content> before
