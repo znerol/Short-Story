@@ -152,69 +152,79 @@ If you want to ignore embedded XMP metadata use an empty template:
                 <xsl:call-template name="xmp-extract"/>
             </xsl:for-each>
 
-            <!-- iterate over all ParagraphStyleRange tags in the Story -->
+            <!-- iterate over all ParagraphStyleRange tags in the Story ond
+                 split them into processable pieces along Br tags -->
             <xsl:for-each select="Story/ParagraphStyleRange">
-                <xsl:call-template name="regroup-paragraph"/>
+                <xsl:call-template name="split-paragraph"/>
             </xsl:for-each>
         </body>
     </xsl:variable>
+
+    <!-- Apply templates matching on the simplified document. Replace this with
+         an xsl:copy-of if you don't want to further process the simplified
+         structure with own templates -->
     <xsl:apply-templates select="exsl:node-set($storytemp)"/>
 </xsl:template>
 
-<!-- tokenize <Content> by <Br> -->
-<xsl:template name="regroup-paragraph">
-    <xsl:for-each select="CharacterStyleRange/Content[name(following-sibling::*[position()=1]) = 'Br']">
-        <p>
-            <!-- copy AppliedParagraphStyle attribute of ParagraphStyleRange ancestor -->
-            <xsl:attribute name="class" select="ancestor::*[position()=2]/@AppliedParagraphStyle"/>
-            <xsl:call-template name="content-backtrack"/>
-        </p>
+<!-- Split up paragraphs by <Br> burried inside ParagraphStyleRange /
+     CharacterStyleRange -->
+<xsl:template name="split-paragraph">
+    <!-- Check if the first node of the first character style range is
+         <Content> and if yes, construct a paragraph around it. Note:
+         xsl:for-each selects at most one node here -->
+    <xsl:for-each select="CharacterStyleRange[position()=1]/*[position()=1]">
+        <xsl:if test="name(.) = 'Content'">
+            <xsl:call-template name="construct-paragraph"/>
+        </xsl:if>
     </xsl:for-each>
 
-    <!-- if we are in the last ParagraphStyleNode, let's check if the last node
-         within the last CharacterStyleRange is a Content. If it is, we need
-         to treat that also -->
-    <xsl:if test="position()=last()">
-        <xsl:for-each select="CharacterStyleRange[position()=last()]/*[position()=last()]">
-            <xsl:if test="name(.) = 'Content'">
-                <p>
-                    <!-- copy AppliedParagraphStyle attribute of ParagraphStyleRange ancestor -->
-                    <xsl:attribute name="class" select="ancestor::*[position()=2]/@AppliedParagraphStyle"/>
-                    <xsl:call-template name="content-backtrack"/>
-                </p>
-            </xsl:if>
-        </xsl:for-each>
-    </xsl:if>
+    <!-- Select all <Content> nodes which are preceded by a <Br> and start
+         another paragraph construction on them -->
+    <xsl:for-each select="CharacterStyleRange/Content[name(preceding-sibling::*[position()=1]) = 'Br']">
+        <xsl:call-template name="construct-paragraph"/>
+    </xsl:for-each>
+
 </xsl:template>
 
-<!-- called within <ParagraphStyleRange>, context is the last <Content> before
-     a <BR/> -->
-<xsl:template name="content-backtrack">
-    <xsl:if test="position()=1">
+<!-- called within split-paragraph, context is the first <Content> of a
+     paragraph -->
+<xsl:template name="construct-paragraph">
+    <p>
+        <!-- copy paragraph style name to the class attribute -->
+        <xsl:attribute name="class">
+            <xsl:value-of select="../../@AppliedParagraphStyle"/>
+        </xsl:attribute>
+        <xsl:call-template name="construct-charstyle"/>
+    </p>
+</xsl:template>
+
+<!-- called from construct-paragraph, context a <Content> -->
+<xsl:template name="construct-charstyle">
+    <!-- apply templates on content -->
+    <span>
+        <!-- copy character style name to the class attribute -->
+        <xsl:attribute name="class">
+            <xsl:value-of select="../@AppliedCharacterStyle"/>
+        </xsl:attribute>
+        <xsl:value-of select="."/>
+    </span>
+
+    <xsl:if test="position()=last()">
         <!-- if this <Content> is the first node within a
              <CharacterStyleRange>, we must backtrack to the last node of the
              previous <CharacterStyleRange> within the current
              <ParagraphStyleRange> and check if that is also a <Content> if it
-             is, we must recurse before copying the stuff over -->
+             is, we must recurse before copying the stuff over
 
-        <!-- Note: this loops purpose is solely to switch the context node to
+             Note: this loops purpose is solely to switch the context node to
              the last child in the parents preceeding sibling. It selects at 
              most one node -->
-        <xsl:for-each select="../preceding-sibling::*[position()=1]/*[position()=last()]">
+        <xsl:for-each select="../following-sibling::*[position()=1]/*[position()=1]">
             <xsl:if test="name(.) = 'Content'">
-                <xsl:call-template name="content-backtrack"/>
+                <xsl:call-template name="construct-charstyle"/>
             </xsl:if>
         </xsl:for-each>
     </xsl:if>
-
-    <!-- apply templates on content -->
-    <span>
-        <!-- copy attributes of CharacterStyleRange ancestor to the charstyle
-             tag -->
-        <!-- copy AppliedCharacterStyle attribute of CharacterStyleRange ancestor -->
-        <xsl:attribute name="class" select="ancestor::*[position()=1]/@AppliedCharacterStyle"/>
-        <xsl:value-of select="."/>
-    </span>
 </xsl:template>
 
 </xsl:stylesheet>
