@@ -135,39 +135,13 @@ If you want to ignore embedded XMP metadata use an empty template:
 
 <!-- entry point matching the root node of an ICML -->
 <xsl:template match="Document">
-    <!-- Client stylesheets may define templates which match on our output
-        with the following structure:
-        <body>
-            <x:xmpmeta>
-                <rdf:RDF>
-                    <rdf:Description about="">
-                        <xmp:Created>...</xmp:Created>
-                        ...
-                    </rdf:Description>
-                    ...
-                </rdf:RDF>
-            </x:xmpmeta>
-
-            <p class='ParagraphStyle/Title'>
-                <span='CharacterStyle/$ID/[No character style]'>
-                   Some Title
-                </span>
-            </p>
-
-            <p class='ParagraphStyle/Body'>
-                <span='CharacterStyle/$ID/[No character style]'>Each paragraph of the body resides in exactly one &lt;p&gt;. Guaranteed. Even if some other </span>
-                <span='CharacterStyle/Bold'>character style</span> is applied in the middle of the a paragraph.
-            </p>
-            ...
-        </body>
-
+    <!--
         In order to enable our clients to operate on the result set, it is
         necessary to convert that back into a node-set. It is possible to do
         that by accumulating the document body in a variable and convert its
         content using exsl:node-set() back to a node set which is selectable
         in a call to apply-templates.
     -->
-
     <xsl:variable name="storytemp">
         <body>
             <xsl:copy-of select="@*"/>
