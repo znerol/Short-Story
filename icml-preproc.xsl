@@ -1,47 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-    Adobe ICML preprocessor stylesheet
-    ==================================
+Adobe ICML preprocessor stylesheet
+==================================
 
-    Use one of the following xslt processor specific templates to configure
-    extraction and processing of embedded XMP metadata together with content
-    processing in one pass:
+Copyright (c) 2011 Lorenz Schori <lo@znerol.ch>
 
-    XSLT template for Saxon:
-        <xsl:template name="xmp-extract">
-            <xsl:copy-of xmlns:saxon="http://saxon.sf.net/" select="saxon:parse(string(.))"/>
-        </xsl:template>
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-        Usage (command line):
-        saxonb-xslt -ext:on -xsl:icml-to-smd-saxon.xsl test-source-1.icml
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
 
-    XSLT template for php5-xslt:
-        <xsl:template name="xmp-extract">
-            <xsl:copy-of xmlns:php="http://php.net/xsl" select="php:function('my_xml_parser',string(.))"/>
-        </xsl:template>
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 
-        Usage:
-        <?php
-            $xsldoc = new DOMDocument();
-            $xsldoc->load('icml-to-smd-php.xsl');
-            $xsltproc = new XSLTProcessor();
-            $xsltproc->importStylesheet($xsldoc);
+This stylesheet produces a simplified structure from Adobe InCopy 4 files in
+the ICML file format. Due to its structure ICML is somewhat hard to transform
+into Markup for the Web, especially because ParagraphStyleRanges do not
+necessarely correspond exactly to paragraph boundaries.
 
-            function my_xml_parser($text) {
-                $newdoc = new DOMDocument();
-                $newdoc->loadXML($text);
-                return $newdoc;
-            }
-            $xsltproc->registerPHPFunctions('my_xml_parser');
+The simplified structure produced by this stylesheet looks much like a html
+fragment and therefore is much easier to transform further:
 
-            $xmldoc = new DOMDocument();
-            $xmldoc->load('test-source-1.icml');
-            echo $xsltproc->transformToXml($xmldoc);
-        ?>
+    <body>
+        <x:xmpmeta>
+            <rdf:RDF>
+                <rdf:Description about="">
+                    <xmp:Created>...</xmp:Created>
+                    ...
+                </rdf:Description>
+                ...
+            </rdf:RDF>
+        </x:xmpmeta>
 
-    If you want to ignore embedded XMP metadata use an empty template:
-        <xsl:template name="xmp-extract">
-        </xsl:template>
+        <p class='ParagraphStyle/Title'>
+            <span='CharacterStyle/$ID/[No character style]'>
+               Some Title
+            </span>
+        </p>
+
+        <p class='ParagraphStyle/Body'>
+            <span='CharacterStyle/$ID/[No character style]'>
+                Each paragraph of the body resides in exactly one
+                &lt;p&gt;. Guaranteed. Even if some other
+            </span>
+            <span='CharacterStyle/Bold'>
+                character style
+            </span>
+            <span='CharacterStyle/$ID/[No character style]'>
+                is applied in the middle of the a paragraph.
+            </span>
+        </p>
+        ...
+    </body>
+
+Use this stylesheet by including it into another one where you define templates
+to transform the simplified structure into a target document. A skeletton of
+might look something like this:
+
+    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+
+    <xsl:include href="icml-preproc.xsl"/>
+
+    <xsl:template name="xmp-extract">
+    </xsl:template>
+
+    <xsl:template match="p">
+        <P><xsl:apply-templates/></P>
+    </xsl:template>
+
+    <xsl:template match="span">
+        <xsl:value-of select="."/>
+    </xsl:template>
+
+    <xsl:template match="@*|node()">
+    </xsl:template>
+
+    </xsl:stylesheet>
+
+Use one of the following xslt processor specific templates to configure
+extraction and processing of embedded XMP metadata together with content
+simplification in one pass.
+
+XSLT template for Saxon:
+    <xsl:template name="xmp-extract">
+        <xsl:copy-of xmlns:saxon="http://saxon.sf.net/" select="saxon:parse(string(.))"/>
+    </xsl:template>
+
+    Usage (command line):
+    saxonb-xslt -ext:on -xsl:icml-to-smd-saxon.xsl test-source-1.icml
+
+XSLT template for php5-xslt:
+    <xsl:template name="xmp-extract">
+        <xsl:copy-of xmlns:php="http://php.net/xsl" select="php:function('my_xml_parser',string(.))"/>
+    </xsl:template>
+
+    Usage:
+    <?php
+        $xsldoc = new DOMDocument();
+        $xsldoc->load('icml-to-smd-php.xsl');
+        $xsltproc = new XSLTProcessor();
+        $xsltproc->importStylesheet($xsldoc);
+
+        function my_xml_parser($text) {
+            $newdoc = new DOMDocument();
+            $newdoc->loadXML($text);
+            return $newdoc;
+        }
+        $xsltproc->registerPHPFunctions('my_xml_parser');
+
+        $xmldoc = new DOMDocument();
+        $xmldoc->load('test-source-1.icml');
+        echo $xsltproc->transformToXml($xmldoc);
+    ?>
+
+If you want to ignore embedded XMP metadata use an empty template:
+    <xsl:template name="xmp-extract">
+    </xsl:template>
 -->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
