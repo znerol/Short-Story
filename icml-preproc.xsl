@@ -130,8 +130,6 @@ If you want to ignore embedded XMP metadata use an empty template:
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
     xmlns:exsl="http://exslt.org/common"
-    xmlns:saxon="http://saxon.sf.net/"
-    xmlns:php="http://php.net/xsl"
     extension-element-prefixes="exsl"
 >
 
