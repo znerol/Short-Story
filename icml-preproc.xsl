@@ -141,21 +141,13 @@
              <ParagraphStyleRange> and check if that is also a <Content> if it
              is, we must recurse before copying the stuff over -->
 
-        <!-- Note: this loops do select at most one node. The goal is to set
-             the context node to the last child of the preceding sibling if
-             that is a <Content> tag -->
-        <xsl:for-each select="ancestor::*[position()=1]">
-            <!-- Now we are at ParagraphStyleRange -->
-            <xsl:for-each select="preceding-sibling::*[position()=1]">
-                <!-- Now we are at the preceding CharacterStyleRange -->
-                <xsl:if test="name(*[position()=last()]) = 'Content'">
-                    <!-- select last sibling inside -->
-                    <xsl:for-each select="*[position()=last()]">
-                        <!-- Now we are at the last Content: recurse -->
-                        <xsl:call-template name="content-backtrack"/>
-                    </xsl:for-each>
-                </xsl:if>
-            </xsl:for-each>
+        <!-- Note: this loops purpose is solely to switch the context node to
+             the last child in the parents preceeding sibling. It selects at 
+             most one node -->
+        <xsl:for-each select="../preceding-sibling::*[position()=1]/*[position()=last()]">
+            <xsl:if test="name(.) = 'Content'">
+                <xsl:call-template name="content-backtrack"/>
+            </xsl:if>
         </xsl:for-each>
     </xsl:if>
 
