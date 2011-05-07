@@ -210,15 +210,13 @@ If you want to ignore embedded XMP metadata use an empty template:
     </span>
 
     <xsl:if test="position()=last()">
-        <!-- if this <Content> is the first node within a
-             <CharacterStyleRange>, we must backtrack to the last node of the
-             previous <CharacterStyleRange> within the current
-             <ParagraphStyleRange> and check if that is also a <Content> if it
-             is, we must recurse before copying the stuff over
+        <!-- If this <Content> is the last node in the character style range,
+             look at the first node of the next character style range in the
+             same paragraph style range. If that is another <Content>: recurse.
 
              Note: this loops purpose is solely to switch the context node to
-             the last child in the parents preceeding sibling. It selects at 
-             most one node -->
+             the first child in the parents next sibling. It selects at most
+             one node -->
         <xsl:for-each select="../following-sibling::*[position()=1]/*[position()=1]">
             <xsl:if test="name(.) = 'Content'">
                 <xsl:call-template name="construct-charstyle"/>
