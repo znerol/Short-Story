@@ -23,10 +23,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 
-This stylesheet produces a simplified structure from Adobe InCopy 4 files in
-the ICML file format. Due to its structure ICML is somewhat hard to transform
-into Markup for the Web, especially because ParagraphStyleRanges do not
-necessarely correspond exactly to paragraph boundaries.
+This stylesheet produces a simplified structure from Adobe InCopy 4 ICML file
+format. Due to its structure ICML is somewhat hard to transform into Markup for
+the Web, especially because ParagraphStyleRanges do not necessarely correspond
+exactly to paragraph boundaries.
 
 The simplified structure produced by this stylesheet looks much like a html
 fragment and therefore is much easier to transform further:
