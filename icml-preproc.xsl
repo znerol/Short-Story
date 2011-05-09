@@ -31,7 +31,7 @@ exactly to paragraph boundaries.
 The simplified structure produced by this stylesheet looks much like a html
 fragment and therefore is much easier to transform further:
 
-    <body>
+    <div class="story">
         <x:xmpmeta>
             <rdf:RDF>
                 <rdf:Description about="">
@@ -50,7 +50,7 @@ fragment and therefore is much easier to transform further:
 
         <p class='ParagraphStyle/Body'>
             <span='CharacterStyle/$ID/[No character style]'>
-                Each paragraph of the body resides in exactly one
+                Each paragraph of the story resides in exactly one
                 &lt;p&gt;. Guaranteed. Even if some other
             </span>
             <span='CharacterStyle/Bold'>
@@ -61,7 +61,7 @@ fragment and therefore is much easier to transform further:
             </span>
         </p>
         ...
-    </body>
+    </div>
 
 Use this stylesheet by including it into another one where you define templates
 to transform the simplified structure into a target document. A skeletton of
@@ -143,7 +143,7 @@ If you want to ignore embedded XMP metadata use an empty template:
         in a call to apply-templates.
     -->
     <xsl:variable name="storytemp">
-        <body>
+        <div class="story">
             <xsl:copy-of select="@*"/>
 
             <!-- parse metadata by trying to call external defined xml parsing
@@ -157,7 +157,7 @@ If you want to ignore embedded XMP metadata use an empty template:
             <xsl:for-each select="Story/ParagraphStyleRange">
                 <xsl:call-template name="split-paragraph"/>
             </xsl:for-each>
-        </body>
+        </div>
     </xsl:variable>
 
     <!-- Apply templates matching on the simplified document. Replace this with

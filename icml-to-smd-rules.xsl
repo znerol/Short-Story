@@ -7,7 +7,7 @@
 >
 
 <!-- SMD XML Document structure -->
-<xsl:template match="body">
+<xsl:template match="div[@class='story']">
 <DDD>
     <DD>
         <xsl:apply-templates select="//rdf:RDF/rdf:Description/*"/>
