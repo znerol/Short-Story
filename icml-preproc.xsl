@@ -122,107 +122,78 @@ XSLT template for php5-xslt:
         $xmldoc->load('test-source-1.icml');
         echo $xsltproc->transformToXml($xmldoc);
     ?>
-
-If you want to ignore embedded XMP metadata use an empty template:
-    <xsl:template name="xmp-extract">
-    </xsl:template>
 -->
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:exsl="http://exslt.org/common"
-    extension-element-prefixes="exsl"
 >
 
-<!-- entry point matching the root node of an ICML -->
+<xsl:output method="xml" encoding="UTF-8"/>
+
 <xsl:template match="Document">
-    <!--
-        In order to enable our clients to operate on the result set, it is
-        necessary to convert that back into a node-set. It is possible to do
-        that by accumulating the document body in a variable and convert its
-        content using exsl:node-set() back to a node set which is selectable
-        in a call to apply-templates.
-    -->
-    <xsl:variable name="storytemp">
-        <div class="story">
-            <xsl:copy-of select="@*"/>
-
-            <!-- parse metadata by trying to call external defined xml parsing
-                 method on embedded RDF/XML XMP stuff -->
-            <xsl:for-each select="Story/MetadataPacketPreference/Properties/Contents/text()">
-                <xsl:call-template name="xmp-extract"/>
-            </xsl:for-each>
-
-            <!-- iterate over all ParagraphStyleRange tags in the Story ond
-                 split them into processable pieces along Br tags -->
-            <xsl:for-each select="Story/ParagraphStyleRange">
-                <xsl:call-template name="split-paragraph"/>
-            </xsl:for-each>
-        </div>
-    </xsl:variable>
-
-    <!-- Apply templates matching on the simplified document. Replace this with
-         an xsl:copy-of if you don't want to further process the simplified
-         structure with own templates -->
-    <xsl:apply-templates select="exsl:node-set($storytemp)"/>
+    <body>
+        <xsl:for-each select="Story">
+            <div class="story">
+                <xsl:call-template name="parse-story"/>
+            </div>
+        </xsl:for-each>
+    </body>
 </xsl:template>
 
-<!-- Split up paragraphs by <Br> burried inside ParagraphStyleRange /
-     CharacterStyleRange -->
-<xsl:template name="split-paragraph">
-    <!-- Check if the first node of the first character style range is
-         <Content> and if yes, construct a paragraph around it. Note:
-         xsl:for-each selects at most one node here -->
-    <xsl:for-each select="CharacterStyleRange[position()=1]/*[position()=1]">
-        <xsl:if test="name(.) = 'Content'">
-            <xsl:call-template name="construct-paragraph"/>
-        </xsl:if>
-    </xsl:for-each>
-
-    <!-- Select all <Content> nodes which are preceded by a <Br> and start
-         another paragraph construction on them -->
-    <xsl:for-each select="CharacterStyleRange/Content[name(preceding-sibling::*[position()=1]) = 'Br']">
-        <xsl:call-template name="construct-paragraph"/>
-    </xsl:for-each>
-
+<!-- Default template to extract XMP-metadata. If you have an XSLT processor
+     which has a parsing extension like saxon:parse, override this template
+     in the calling stylesheet -->
+<xsl:template name="xmp-extract">
+    <xsl:value-of select="." disable-output-escaping="yes"/>
 </xsl:template>
 
-<!-- called within split-paragraph, context is the first <Content> of a
-     paragraph -->
-<xsl:template name="construct-paragraph">
+<!-- Context: Story node. Extract XMP metadata and regroup all Content nodes
+     into p and span elements. -->
+<xsl:template name="parse-story">
+    <!-- parse metadata by trying to call external defined xml parsing method
+         on embedded RDF/XML XMP stuff -->
+    <xsl:for-each select="MetadataPacketPreference/Properties/Contents/text()">
+        <xsl:call-template name="xmp-extract"/>
+    </xsl:for-each>
+
+    <!-- Start text processing with first Content-Node -->
+    <xsl:for-each select=".//Content[count(preceding::Content)=0]">
+        <xsl:call-template name="start-paragraph"/>
+    </xsl:for-each>
+</xsl:template>
+
+<!-- Context: The first content node of a paragraph. Construct new paragraph
+     and start processing of all content nodes of this paragraph -->
+<xsl:template name="start-paragraph">
     <p>
         <!-- copy paragraph style name to the class attribute -->
         <xsl:attribute name="class">
-            <xsl:value-of select="../../@AppliedParagraphStyle"/>
+            <xsl:value-of select="ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle"/>
         </xsl:attribute>
-        <xsl:call-template name="construct-charstyle"/>
+        <xsl:call-template name="start-content"/>
     </p>
+
+    <!-- Jump to the Content node following the next Br tag and recurse -->
+    <xsl:for-each select="following::Br[1]">
+        <xsl:for-each select="following::Content[1]">
+            <xsl:call-template name='start-paragraph'/>
+        </xsl:for-each>
+    </xsl:for-each>
 </xsl:template>
 
-<!-- called from construct-paragraph, context a <Content> -->
-<xsl:template name="construct-charstyle">
-    <!-- apply templates on content -->
+<!-- Context: A Content node. Construct span and copy style attribute -->
+<xsl:template name="start-content">
     <span>
         <!-- copy character style name to the class attribute -->
         <xsl:attribute name="class">
-            <xsl:value-of select="../@AppliedCharacterStyle"/>
+            <xsl:value-of select="ancestor::CharacterStyleRange[1]/@AppliedCharacterStyle"/>
         </xsl:attribute>
         <xsl:value-of select="."/>
     </span>
 
-    <xsl:if test="position()=last()">
-        <!-- If this <Content> is the last node in the character style range,
-             look at the first node of the next character style range in the
-             same paragraph style range. If that is another <Content>: recurse.
-
-             Note: this loops purpose is solely to switch the context node to
-             the first child in the parents next sibling. It selects at most
-             one node -->
-        <xsl:for-each select="../following-sibling::*[position()=1]/*[position()=1]">
-            <xsl:if test="name(.) = 'Content'">
-                <xsl:call-template name="construct-charstyle"/>
-            </xsl:if>
-        </xsl:for-each>
-    </xsl:if>
+    <!-- Jump to the next Content node, if no Br is following us -->
+    <xsl:for-each select="(following::Br|following::Content)[1][name()='Content']">
+        <xsl:call-template name='start-content'/>
+    </xsl:for-each>
 </xsl:template>
 
 </xsl:stylesheet>
