@@ -168,6 +168,10 @@ XSLT template for php5-xslt:
         <!-- copy paragraph style name to the class attribute -->
         <xsl:attribute name="class">
             <xsl:value-of select="ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle"/>
+            <xsl:if test="ancestor::ParagraphStyleRange[1]/@Position">
+                <xsl:text> Position-</xsl:text>
+                <xsl:value-of select="ancestor::ParagraphStyleRange[1]/@Position"/>
+            </xsl:if>
         </xsl:attribute>
         <xsl:call-template name="start-content"/>
     </p>
@@ -186,6 +190,10 @@ XSLT template for php5-xslt:
         <!-- copy character style name to the class attribute -->
         <xsl:attribute name="class">
             <xsl:value-of select="ancestor::CharacterStyleRange[1]/@AppliedCharacterStyle"/>
+            <xsl:if test="ancestor::CharacterStyleRange[1]/@Position">
+                <xsl:text> Position-</xsl:text>
+                <xsl:value-of select="ancestor::CharacterStyleRange[1]/@Position"/>
+            </xsl:if>
         </xsl:attribute>
         <xsl:value-of select="."/>
     </span>
