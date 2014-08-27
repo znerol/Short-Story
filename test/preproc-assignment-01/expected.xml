@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<body>
+  <article>
+    <section class="ParagraphStyle/Title">
+      <p class="ParagraphStyle/Title">
+        <span class="CharacterStyle/$ID/[No character style]">Some Text</span>
+      </p>
+    </section>
+    <section class="ParagraphStyle/Text">
+      <p class="ParagraphStyle/Text">
+        <span class="CharacterStyle/$ID/[No character style]">Sumquasinim repernatia debis debis ute num nisitatur alignat.</span>
+      </p>
+      <p class="ParagraphStyle/Text">
+        <span class="CharacterStyle/$ID/[No character style]">Nam harum qui non rem. Ita imus et, offic tem andae nam, aut voluptas repe pelest pedi dioreperion nis sendit ipicia sinis rem ex et volor </span>
+        <span class="CharacterStyle/Bold">millaut exerspe rciates</span>
+        <span class="CharacterStyle/$ID/[No character style]"> imus explat faciliqui dolenis anitia velendi gendant.</span>
+      </p>
+    </section>
+    <section class="ParagraphStyle/Enumeration">
+      <p class="ParagraphStyle/Enumeration">
+        <span class="CharacterStyle/$ID/[No character style]">Ectionsero quameni ut aciae minus rerum utempor essequid quas nos eicipicid quatia voles consedi ctectem hitibusae. Luptatiur? Tas as inciandentis et pro doluptum fuga. Aquam ea qui cus, odit, est aut ent.</span>
+      </p>
+      <p class="ParagraphStyle/Enumeration">
+        <span class="CharacterStyle/$ID/[No character style]">Faccus arum faceaque omnihit ommodia volupti assitiis si unt as nonsedit dolum ipsa non eliciat quam ut int pro officipsum volor autaturiorum nonsequ unditemquam adit laut rerspicatiam dolorum ni to blam, quiat.</span>
+      </p>
+    </section>
+    <section class="ParagraphStyle/Text">
+      <p class="ParagraphStyle/Text">
+        <span class="CharacterStyle/$ID/[No character style]">Nis aribusciet aliquam volorum voluptation pelecearume ne volores eceatur? Quiandaest ipicimo dunt eiunt entus conest doloris doluptasi ut iligeni simporae plabo. Imil illab incipis imenda consedi deriant veraece</span>
+      </p>
+    </section>
+  </article>
+  <article>
+    <section class="ParagraphStyle/Factbox Title">
+      <p class="ParagraphStyle/Factbox Title">
+        <span class="CharacterStyle/$ID/[No character style]">some facts</span>
+      </p>
+    </section>
+    <section class="ParagraphStyle/Factbox Text">
+      <p class="ParagraphStyle/Factbox Text">
+        <span class="CharacterStyle/$ID/[No character style]">Ferior moluptassunt omniend igent.</span>
+      </p>
+      <p class="ParagraphStyle/Factbox Text">
+        <span class="CharacterStyle/$ID/[No character style]">Itat ut quam </span>
+        <span class="CharacterStyle/Bold">eaquidero</span>
+        <span class="CharacterStyle/$ID/[No character style]"> volum at.</span>
+      </p>
+      <p class="ParagraphStyle/Factbox Text">
+        <span class="CharacterStyle/$ID/[No character style]">Sequae ped ea non est, illatusam, quam haribus.</span>
+      </p>
+    </section>
+  </article>
+</body>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Document DOMVersion="8.0" Self="d">
+  <Story Self="ud2">
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Title">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>Some Text</Content>
+        <Br/>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Text">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>Sumquasinim repernatia debis debis ute num nisitatur alignat.</Content>
+        <Br/>
+        <Content>Nam harum qui non rem. Ita imus et, offic tem andae nam, aut voluptas repe pelest pedi dioreperion nis sendit ipicia sinis rem ex et volor </Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/Bold">
+        <Content>millaut exerspe rciates</Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content> imus explat faciliqui dolenis anitia velendi gendant.</Content>
+        <Br/>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Enumeration">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>Ectionsero quameni ut aciae minus rerum utempor essequid quas nos eicipicid quatia voles consedi ctectem hitibusae. Luptatiur? </Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Properties>
+          <Leading type="unit">0</Leading>
+        </Properties>
+        <Content>Tas</Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content> as inciandentis et pro doluptum fuga. Aquam ea qui cus, odit, est aut ent.</Content>
+        <Br/>
+        <Content>Faccus arum faceaque omnihit ommodia volupti assitiis si unt as nonsedit dolum ipsa non eliciat quam ut int pro officipsum volor autaturiorum nonsequ unditemquam adit laut rerspicatiam dolorum ni to blam, quiat.</Content>
+        <Br/>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Text">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>Nis aribusciet aliquam volorum voluptation pelecearume ne volores eceatur? Quiandaest ipicimo dunt eiunt entus conest doloris doluptasi ut iligeni simporae plabo. Imil illab incipis imenda consedi deriant veraece</Content>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+  </Story>
+</Document>

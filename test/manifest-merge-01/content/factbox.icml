@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Document DOMVersion="8.0" Self="d">
+  <Story Self="ud2">
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Factbox Title">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>some facts</Content>
+        <Br/>
+        <Content>Ferior moluptassunt omniend igent.</Content>
+        <Br/>
+        <Content>Itat ut quam </Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/Bold">
+        <Content>eaquidero</Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content> volum at.</Content>
+        <Br/>
+        <Content>Sequae ped ea non est, illatusam, quam haribus.</Content>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+  </Story>
+</Document>

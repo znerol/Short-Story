@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Document>
+  <Story Self="ufc">
+    <Link Self="u10e" LinkResourceURI="file:/Volumes/Squat/simple.icml"/>
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Title">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>Some Text</Content>
+        <Br/>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Text">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>Sumquasinim repernatia debis debis ute num nisitatur alignat.</Content>
+        <Br/>
+        <Content>Nam harum qui non rem. Ita imus et, offic tem andae nam, aut voluptas repe pelest pedi dioreperion nis sendit ipicia sinis rem ex et volor </Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/Bold">
+        <Content>millaut exerspe rciates</Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content> imus explat faciliqui dolenis anitia velendi gendant.</Content>
+        <Br/>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Enumeration">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>Ectionsero quameni ut aciae minus rerum utempor essequid quas nos eicipicid quatia voles consedi ctectem hitibusae. Luptatiur? </Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Properties>
+          <Leading type="unit">0</Leading>
+        </Properties>
+        <Content>Tas</Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content> as inciandentis et pro doluptum fuga. Aquam ea qui cus, odit, est aut ent.</Content>
+        <Br/>
+        <Content>Faccus arum faceaque omnihit ommodia volupti assitiis si unt as nonsedit dolum ipsa non eliciat quam ut int pro officipsum volor autaturiorum nonsequ unditemquam adit laut rerspicatiam dolorum ni to blam, quiat.</Content>
+        <Br/>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Text">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>Nis aribusciet aliquam volorum voluptation pelecearume ne volores eceatur? Quiandaest ipicimo dunt eiunt entus conest doloris doluptasi ut iligeni simporae plabo. Imil illab incipis imenda consedi deriant veraece</Content>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+  </Story>
+  <Story Self="udc">
+    <Link Self="uf4" LinkResourceURI="file:/Volumes/Squat/factbox.icml"/>
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Factbox Title">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>some facts</Content>
+        <Br/>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Factbox Text">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>Ferior moluptassunt omniend igent.</Content>
+        <Br/>
+        <Content>Itat ut quam </Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/Bold">
+        <Content>eaquidero</Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content> volum at.</Content>
+        <Br/>
+        <Content>Sequae ped ea non est, illatusam, quam haribus.</Content>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+  </Story>
+  <Assignment>
+    <Properties>
+      <FrameColor type="enumeration">LightBlue</FrameColor>
+    </Properties>
+    <AssignedStory Self="uf5" Name="factbox.icml" StoryReference="udc" FilePath="Squat:factbox.icml"/>
+    <AssignedStory Self="u111" Name="simple.icml" StoryReference="ufc" FilePath="Squat:simple.icml"/>
+  </Assignment>
+</Document>
