@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Document DOMVersion="8.0" Self="d">
+  <Story>
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/$ID/NormalParagraphStyle">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>this text</Content>
+        <Change ChangeType="DeletedText">
+          <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/$ID/NormalParagraphStyle">
+            <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+              <Content> never </Content>
+            </CharacterStyleRange>
+          </ParagraphStyleRange>
+        </Change>
+        <Content>was modified</Content>
+        <Change ChangeType="InsertedText">
+          <Content> once</Content>
+        </Change>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+  </Story>
+</Document>
