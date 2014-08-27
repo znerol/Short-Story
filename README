@@ -1,105 +1,55 @@
-Adobe ICML preprocessor stylesheet
-==================================
+Adobe ICML and ICMA preprocessor stylesheets
+============================================
 
 This icml-preproc.xsl stylesheet produces a simplified structure from Adobe
-InCopy 4 ICML file format. Due to its structure ICML is somewhat hard to
-transform into Markup for the Web, especially because ParagraphStyleRanges do
-not necessarely correspond exactly to paragraph boundaries.
+InCopy 4 ICML and ICMA file format. Due to its structure ICML is somewhat hard
+to transform into Markup for the Web, especially because ParagraphStyleRanges
+do not necessarely correspond exactly to paragraph boundaries.
 
 The simplified structure produced by this stylesheet looks much like a html
-fragment and therefore is much easier to transform further:
+fragment and therefore is way easier to transform further:
 
-    <div class="story">
-        <x:xmpmeta>
-            <rdf:RDF>
-                <rdf:Description about="">
-                    <xmp:Created>...</xmp:Created>
+    <body>
+        <article>
+            <x:xmpmeta>
+                <rdf:RDF>
+                    <rdf:Description about="">
+                        <xmp:Created>...</xmp:Created>
+                        ...
+                    </rdf:Description>
                     ...
-                </rdf:Description>
-                ...
-            </rdf:RDF>
-        </x:xmpmeta>
+                </rdf:RDF>
+            </x:xmpmeta>
 
-        <p class='ParagraphStyle/Title'>
-            <span='CharacterStyle/$ID/[No character style]'>
-               Some Title
-            </span>
-        </p>
+            <section class='ParagraphStyle/Title'>
+                <p class='ParagraphStyle/Title'>
+                    <span class='CharacterStyle/$ID/[No character style]'>
+                       Some Title
+                    </span>
+                </p>
+            </section>
 
-        <p class='ParagraphStyle/Body'>
-            <span='CharacterStyle/$ID/[No character style]'>
-                Each paragraph of the story resides in exactly one
-                &lt;p&gt;. Guaranteed. Even if some other
-            </span>
-            <span='CharacterStyle/Bold'>
-                character style
-            </span>
-            <span='CharacterStyle/$ID/[No character style]'>
-                is applied in the middle of the a paragraph.
-            </span>
-        </p>
+            <section class='ParagraphStyle/Body'>
+                <p class='ParagraphStyle/Body'>
+                    <span class='CharacterStyle/$ID/[No character style]'>
+                        Each paragraph of the story resides in exactly one
+                        &lt;p&gt;. Guaranteed. Even if some other
+                    </span>
+                    <span class='CharacterStyle/Bold'>
+                        character style
+                    </span>
+                    <span class='CharacterStyle/$ID/[No character style]'>
+                        is applied in the middle of the a paragraph.
+                    </span>
+                </p>
+            </section>
+            ...
+        </article>
+        <article>
+            ...
+        </article>
         ...
-    </div>
-
-Use this stylesheet by including it into another one where you define templates
-to transform the simplified structure into a target document. A skeletton of
-might look something like this:
-
-    <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-
-    <xsl:include href="icml-preproc.xsl"/>
-
-    <xsl:template name="xmp-extract">
-    </xsl:template>
-
-    <xsl:template match="p">
-        <P><xsl:apply-templates/></P>
-    </xsl:template>
-
-    <xsl:template match="span">
-        <xsl:value-of select="."/>
-    </xsl:template>
-
-    <xsl:template match="@*|node()">
-    </xsl:template>
-
-    </xsl:stylesheet>
-
-Use one of the following xslt processor specific templates to configure
-extraction and processing of embedded XMP metadata together with content
-simplification in one pass.
-
-XSLT template for Saxon:
-    <xsl:template name="xmp-extract">
-        <xsl:copy-of xmlns:saxon="http://saxon.sf.net/" select="saxon:parse(string(.))"/>
-    </xsl:template>
-
-    Usage (command line):
-    saxonb-xslt -ext:on -xsl:icml-to-smd-saxon.xsl test-source-1.icml
-
-XSLT template for php5-xslt:
-    <xsl:template name="xmp-extract">
-        <xsl:copy-of xmlns:php="http://php.net/xsl" select="php:function('my_xml_parser',string(.))"/>
-    </xsl:template>
-
-    Usage:
-    <?php
-        $xsldoc = new DOMDocument();
-        $xsldoc->load('icml-to-smd-php.xsl');
-        $xsltproc = new XSLTProcessor();
-        $xsltproc->importStylesheet($xsldoc);
-
-        function my_xml_parser($text) {
-            $newdoc = new DOMDocument();
-            $newdoc->loadXML($text);
-            return $newdoc;
-        }
-        $xsltproc->registerPHPFunctions('my_xml_parser');
-
-        $xmldoc = new DOMDocument();
-        $xmldoc->load('test-source-1.icml');
-        echo $xsltproc->transformToXml($xmldoc);
-    ?>
+    </body>
 
 If you want to ignore embedded XMP metadata use an empty template:
     <xsl:template name="xmp-extract">

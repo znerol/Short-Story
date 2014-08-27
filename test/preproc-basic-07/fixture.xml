@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Document DOMVersion="6.0" Self="d">
+    <Story>
+	<ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/$ID/[No paragraph style]">
+            <CharacterStyleRange AppliedCharacterStyle="foo-char-style">
+                <Content>foo</Content>
+            </CharacterStyleRange>
+            <CharacterStyleRange AppliedCharacterStyle="bar-char-style">
+                <Content>bar</Content>
+            </CharacterStyleRange>
+        </ParagraphStyleRange>
+    </Story>
+</Document>

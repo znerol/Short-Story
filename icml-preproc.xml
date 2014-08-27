@@ -39,16 +39,17 @@ necessary to wrap a container around elements of the same class (e.g. lists).
     xmlns:func="http://exslt.org/functions"
     xmlns:short-story="https://github.com/znerol/Short-Story"
     extension-element-prefixes="func"
+    exclude-result-prefixes="short-story"
 >
 
-<xsl:output method="xml" encoding="UTF-8"/>
+<xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 
 <xsl:template match="Document">
-    <short-story:document>
+    <body>
         <xsl:for-each select="//Story">
             <xsl:call-template name="article"/>
         </xsl:for-each>
-    </short-story:document>
+    </body>
 </xsl:template>
 
 <!-- Default template to extract XMP-metadata. If you have an XSLT processor
@@ -61,7 +62,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 <!-- Context: Story node. Extract XMP metadata and regroup all Content nodes
      into section, p and span elements. -->
 <xsl:template name="article">
-    <short-story:article>
+    <article>
         <!-- parse metadata by trying to call external defined xml parsing method
              on embedded RDF/XML XMP stuff -->
         <xsl:for-each select="MetadataPacketPreference/Properties/Contents/text()">
@@ -71,12 +72,12 @@ necessary to wrap a container around elements of the same class (e.g. lists).
         <xsl:for-each select=".//Content[short-story:section-head(.)]">
             <xsl:call-template name="section"/>
         </xsl:for-each>
-    </short-story:article>
+    </article>
 </xsl:template>
 
 <!-- Context: First Content node of a section -->
 <xsl:template name="section">
-    <short-story:section>
+    <section>
         <xsl:attribute name="class">
             <xsl:value-of select="short-story:get-section-class(.)"/>
         </xsl:attribute>
@@ -84,12 +85,12 @@ necessary to wrap a container around elements of the same class (e.g. lists).
         <xsl:for-each select="short-story:section-elements(.)[short-story:paragraph-head(.)]">
             <xsl:call-template name="paragraph"/>
         </xsl:for-each>
-    </short-story:section>
+    </section>
 </xsl:template>
 
 <!-- Context: First Content node of a paragraph -->
 <xsl:template name="paragraph">
-    <short-story:p>
+    <p>
         <xsl:attribute name="class">
             <xsl:value-of select="short-story:get-paragraph-class(.)"/>
         </xsl:attribute>
@@ -97,17 +98,17 @@ necessary to wrap a container around elements of the same class (e.g. lists).
         <xsl:for-each select="short-story:paragraph-elements(.)">
             <xsl:call-template name="fragment"/>
         </xsl:for-each>
-    </short-story:p>
+    </p>
 </xsl:template>
 
 <!-- Context: Content node -->
 <xsl:template name="fragment">
-    <short-story:span>
+    <span>
         <xsl:attribute name="class">
             <xsl:value-of select="short-story:get-fragment-class(.)"/>
         </xsl:attribute>
         <xsl:value-of select="."/>
-    </short-story:span>
+    </span>
 </xsl:template>
 
 

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<body>
+  <article>
+    <section class="foo-paragraph-style">
+      <p class="foo-paragraph-style">
+        <span class="CharacterStyle/$ID/[No character style]">foo</span>
+      </p>
+    </section>
+    <section class="bar-paragraph-style">
+      <p class="bar-paragraph-style">
+        <span class="CharacterStyle/$ID/[No character style]">bar</span>
+      </p>
+    </section>
+  </article>
+</body>
