@@ -3,8 +3,7 @@
   <article>
     <section class="ParagraphStyle/$ID/[No paragraph style]">
       <p class="ParagraphStyle/$ID/[No paragraph style]">
-        <span class="CharacterStyle/$ID/[No character style]">foo</span>
-        <span class="CharacterStyle/$ID/[No character style]">bar</span>
+        <span class="CharacterStyle/$ID/[No character style]">foobar</span>
       </p>
     </section>
   </article>
