@@ -129,26 +129,14 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 
 
 
-<func:function name="short-story:section-key-is-boundary">
+<func:function name="short-story:section-anchor">
     <xsl:param name="n" />
-    <func:result select="$n[short-story:get-section-class(.) != short-story:get-section-class(./preceding::Content[1])]"/>
+    <func:result select="($n/ancestor::Story | preceding::Content[short-story:get-section-class(.) != short-story:get-section-class($n)])[position()=last()]"/>
 </func:function>
-
-<func:function name="short-story:section-key-get-preceding-boundary">
-    <xsl:param name="n" />
-    <func:result select="$n/preceding::Content[short-story:section-key-is-boundary(.)][1]"/>
-</func:function>
-
-<func:function name="short-story:section-key-get-initial">
-    <xsl:param name="n" />
-    <func:result select="$n[count(short-story:section-key-get-preceding-boundary(.)) = 0]"/>
-</func:function>
-
-
 
 <func:function name="short-story:section-key">
     <xsl:param name="n" />
-    <func:result select="($n[short-story:section-key-is-boundary(.)] | short-story:section-key-get-preceding-boundary($n) | $n[short-story:section-key-get-initial(.)])[position()=last()]"/>
+    <func:result select="generate-id(short-story:section-anchor($n))"/>
 </func:function>
 
 <func:function name="short-story:section-elements">
@@ -165,9 +153,14 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 
 
 
+<func:function name="short-story:paragraph-anchor">
+    <xsl:param name="n" />
+    <func:result select="(short-story:section-anchor($n) | $n/preceding::Br)[position()=last()]"/>
+</func:function>
+
 <func:function name="short-story:paragraph-key">
     <xsl:param name="n" />
-    <func:result select="count($n/preceding::Br)" />
+    <func:result select="generate-id(short-story:paragraph-anchor($n))"/>
 </func:function>
 
 <func:function name="short-story:paragraph-elements">
