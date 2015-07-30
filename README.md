@@ -54,5 +54,6 @@ fragment and therefore is way easier to transform further:
     </body>
 
 If you want to ignore embedded XMP metadata use an empty template:
+
     <xsl:template name="xmp-extract">
     </xsl:template>
