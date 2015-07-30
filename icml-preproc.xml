@@ -220,7 +220,10 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 
 <func:function name="short-story:get-link-href">
     <xsl:param name="n" />
-    <func:result select="//HyperlinkURLDestination[@Self=//Hyperlink[@Source=$n/ancestor-or-self::HyperlinkTextSource[1]/@Self]//Destination]/@DestinationURL"/>
+    <func:result select="key('hyperlink_url_destinations', key('hyperlinks', $n/ancestor-or-self::HyperlinkTextSource[1]/@Self)//Destination)/@DestinationURL"/>
 </func:function>
+
+<xsl:key name='hyperlinks' match='Hyperlink' use='@Source'/>
+<xsl:key name='hyperlink_url_destinations' match='HyperlinkURLDestination' use='@Self'/>
 
 </xsl:stylesheet>
