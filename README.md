@@ -1,6 +1,8 @@
 Adobe ICML and ICMA preprocessor stylesheets
 ============================================
 
+[![Build Status](https://travis-ci.org/znerol/Short-Story.svg?branch=master)](https://travis-ci.org/znerol/Short-Story)
+
 This icml-preproc.xsl stylesheet produces a simplified structure from Adobe
 InCopy 4 ICML and ICMA file format. Due to its structure ICML is somewhat hard
 to transform into Markup for the Web, especially because ParagraphStyleRanges
