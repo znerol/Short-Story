@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<Document DOMVersion="6.0" Self="d">
+    <Story>
+        <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/$ID/[No paragraph style]">
+            <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+                <Content>Ibusdame voluptatur? Essit volo dolor aut as aut a conecaesto torestia endis rercim ipsamet et, quam ute sum qui accupti volloribus sed mo consequi optiae num apic tem. Exped quiande doluptaest fuga. Et qui dolo ipsamento berio. Itae miliquatem apiet eum et quo beatis dolupta temolupicto beate ex estios est volupta tinctem atas aut veribus a int quo blaboru mquidebit odis ereris custrumquo vellor sam, tem sit verumen derovid utendis exercim ea dus andempo reruptatecae prerit expliquia poreri non re nulliti aturem rest, toresti totatio nsecae. Dem que consedis as nonsequibus ma quat undandel estis dolorrovit et aliquas asitae nus modi quaero blabo. Et ullam, auta quatiun digent quis dolut ad que vendunt inulpa sandis et voluptur ratia nonsequidus id molupta turest, as volume ditatin nat occupiendae nis aped quam ut omnitatae nem quibusania dolorep eliquas piendis quis molore et labo. Evelis exces et voluptatiae eatem eum volupta con re nima dempore rferit is deribeat ut quaspiendem que optae del is ex ention nist </Content>
+                <HyperlinkTextSource Self="u265" Name="Hyperlink 2" Hidden="false" AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+                    <Content>pliquatiae con conseque nient</Content>
+                </HyperlinkTextSource>
+                <Content>.</Content>
+                <Br/>
+                <Content>Conecta as aborpor aut porro cum, nonecus erspietur atiis cus incia venecte sum, ullestin nonse laborro rendio doleni re quame nullupta pernatur sus dolupta sperferissus ea qui si nis ut pre nienimu sament harume peliqui ut untis evelitibus repedi doluptatur ad qui </Content>
+                <HyperlinkTextSource Self="u268" Name="Hyperlink 4" Hidden="false" AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+                    <Content>officium</Content>
+                </HyperlinkTextSource>
+                <Content> non cus enitam, arum, offic tempossitium nosam sector aliquam ut as accus es non cus sa demodis voloribust.</Content>
+            </CharacterStyleRange>
+        </ParagraphStyleRange>
+    </Story>
+    <HyperlinkURLDestination Self="HyperlinkURLDestination/http%3a//www.example.com/" DestinationUniqueKey="4" Name="http://www.example.com/" DestinationURL="http://www.example.com/" Hidden="true"/>
+    <HyperlinkURLDestination Self="HyperlinkURLDestination/mailto%3aadmin@example.com" DestinationUniqueKey="7" Name="mailto:admin@example.com" DestinationURL="mailto:admin@example.com" Hidden="false"/>
+    <Hyperlink Self="u26a" Name="pliquatiae con conseque nient" Source="u265" Visible="false" Highlight="None" Width="Thin" BorderStyle="Solid" Hidden="false" DestinationUniqueKey="4">
+        <Properties>
+            <BorderColor type="enumeration">Black</BorderColor>
+            <Destination type="object">HyperlinkURLDestination/http%3a//www.example.com/</Destination>
+        </Properties>
+    </Hyperlink>
+    <Hyperlink Self="u26b" Name="officium" Source="u268" Visible="false" Highlight="None" Width="Thin" BorderStyle="Solid" Hidden="false" DestinationUniqueKey="7">
+        <Properties>
+            <BorderColor type="enumeration">Black</BorderColor>
+            <Destination type="object">HyperlinkURLDestination/mailto%3aadmin@example.com</Destination>
+        </Properties>
+    </Hyperlink>
+</Document>

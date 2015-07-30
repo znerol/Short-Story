@@ -52,6 +52,19 @@ necessary to wrap a container around elements of the same class (e.g. lists).
     </body>
 </xsl:template>
 
+<xsl:template match="Content">
+    <xsl:value-of select="."/>
+</xsl:template>
+
+<xsl:template match="HyperlinkTextSource//Content">
+    <a>
+        <xsl:attribute name="href">
+            <xsl:value-of select="short-story:get-link-href(.)"/>
+        </xsl:attribute>
+        <xsl:value-of select="."/>
+    </a>
+</xsl:template>
+
 <!-- Default template to extract XMP-metadata. If you have an XSLT processor
      which has a parsing extension like saxon:parse, override this template
      in the calling stylesheet -->
@@ -109,7 +122,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
         </xsl:attribute>
 
         <xsl:for-each select="short-story:fragment-elements(.)">
-            <xsl:value-of select="."/>
+            <xsl:apply-templates select="."/>
         </xsl:for-each>
     </span>
 </xsl:template>
@@ -202,5 +215,12 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 </func:function>
 
 <xsl:key name='fragments' match='Content' use='short-story:fragment-key(.)'/>
+
+
+
+<func:function name="short-story:get-link-href">
+    <xsl:param name="n" />
+    <func:result select="//HyperlinkURLDestination[@Self=//Hyperlink[@Source=$n/ancestor-or-self::HyperlinkTextSource[1]/@Self]//Destination]/@DestinationURL"/>
+</func:function>
 
 </xsl:stylesheet>
