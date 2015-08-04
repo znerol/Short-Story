@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<body>
+  <article>
+    <section class="ParagraphStyle/$ID/NormalParagraphStyle">
+      <p class="ParagraphStyle/$ID/NormalParagraphStyle">
+        <span class="CharacterStyle/$ID/[No character style]">CO</span>
+        <span class="CharacterStyle/$ID/[No character style] Position-Subscript">2</span>
+        <span class="CharacterStyle/$ID/[No character style]"> m</span>
+        <span class="CharacterStyle/$ID/[No character style] Position-Superscript">3</span>
+      </p>
+    </section>
+  </article>
+</body>

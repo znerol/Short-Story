@@ -141,7 +141,13 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 
 <func:function name="short-story:get-fragment-class">
     <xsl:param name="n" />
-    <func:result select="$n/ancestor-or-self::CharacterStyleRange[1]/@AppliedCharacterStyle"/>
+    <func:result>
+        <xsl:value-of select="$n/ancestor-or-self::CharacterStyleRange[1]/@AppliedCharacterStyle"/>
+        <xsl:if test="$n/ancestor-or-self::CharacterStyleRange[1]/@Position">
+            <xsl:text> Position-</xsl:text>
+            <xsl:value-of select="$n/ancestor-or-self::CharacterStyleRange[1]/@Position"/>
+        </xsl:if>
+    </func:result>
 </func:function>
 
 
