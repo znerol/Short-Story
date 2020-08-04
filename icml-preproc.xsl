@@ -36,10 +36,6 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 
 <xsl:stylesheet version="1.0"
     xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-    xmlns:func="http://exslt.org/functions"
-    xmlns:short-story="https://github.com/znerol/Short-Story"
-    extension-element-prefixes="func"
-    exclude-result-prefixes="short-story"
 >
 
 <xsl:output method="xml" indent="yes" encoding="UTF-8"/>
@@ -59,7 +55,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 <xsl:template match="HyperlinkTextSource//Content">
     <a>
         <xsl:attribute name="href">
-            <xsl:value-of select="short-story:get-link-href(.)"/>
+            <xsl:value-of select="key('hyperlink_url_destinations', key('hyperlinks', ./ancestor-or-self::HyperlinkTextSource[1]/@Self)//Destination)/@DestinationURL"/>
         </xsl:attribute>
         <xsl:value-of select="."/>
     </a>
@@ -72,6 +68,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
     <xsl:value-of select="." disable-output-escaping="yes"/>
 </xsl:template>
 
+
 <!-- Context: Story node. Extract XMP metadata and regroup all Content nodes
      into section, p and span elements. -->
 <xsl:template name="article">
@@ -82,153 +79,85 @@ necessary to wrap a container around elements of the same class (e.g. lists).
             <xsl:call-template name="xmp-extract"/>
         </xsl:for-each>
 
-        <xsl:for-each select=".//Content[short-story:section-head(.)]">
-            <xsl:call-template name="section"/>
+        <xsl:for-each select=".//Content">
+            <xsl:variable name="section-key" select="concat(generate-id(./ancestor-or-self::Story[1]), generate-id(./ancestor-or-self::ParagraphStyleRange/preceding::ParagraphStyleRange[@AppliedParagraphStyle != current()/ancestor-or-self::ParagraphStyleRange[1]/@AppliedParagraphStyle][1]))"/>
+
+
+
+            <xsl:if test=". = key('sections', $section-key)[1]">
+                <xsl:call-template name="section">
+                    <xsl:with-param name="section-key" select="$section-key"/>
+                </xsl:call-template>
+            </xsl:if>
+
         </xsl:for-each>
     </article>
 </xsl:template>
 
 <!-- Context: First Content node of a section -->
 <xsl:template name="section">
+    <xsl:param name="section-key" />
+
     <section>
         <xsl:attribute name="class">
-            <xsl:value-of select="short-story:get-section-class(.)"/>
+            <xsl:value-of select="./ancestor-or-self::ParagraphStyleRange[1]/@AppliedParagraphStyle"/>
         </xsl:attribute>
 
-        <xsl:for-each select="short-story:section-elements(.)[short-story:paragraph-head(.)]">
-            <xsl:call-template name="paragraph"/>
+        <xsl:for-each select="key('sections', $section-key)">
+            <xsl:variable name="paragraph-key" select="concat(generate-id(./ancestor-or-self::Story[1]), generate-id(./preceding::Br[1]))"/>
+
+            <xsl:if test=". = key('paragraphs', $paragraph-key)[1]">
+                <xsl:call-template name="paragraph">
+                    <xsl:with-param name="paragraph-key" select="$paragraph-key"/>
+                </xsl:call-template>
+            </xsl:if>
         </xsl:for-each>
     </section>
 </xsl:template>
 
 <!-- Context: First Content node of a paragraph -->
 <xsl:template name="paragraph">
+    <xsl:param name="paragraph-key" />
+
     <p>
         <xsl:attribute name="class">
-            <xsl:value-of select="short-story:get-paragraph-class(.)"/>
+            <xsl:value-of select="./ancestor-or-self::ParagraphStyleRange[1]/@AppliedParagraphStyle"/>
         </xsl:attribute>
 
-        <xsl:for-each select="short-story:paragraph-elements(.)[short-story:fragment-head(.)]">
-            <xsl:call-template name="fragment"/>
+        <xsl:for-each select="key('paragraphs', $paragraph-key)">
+            <xsl:variable name="fragment-key" select="concat(generate-id(./ancestor-or-self::Story[1]), generate-id(./preceding::Br[1]), generate-id(./ancestor-or-self::CharacterStyleRange/preceding::CharacterStyleRange[concat(@AppliedCharacterStyle, @Position) != concat(current()/ancestor-or-self::CharacterStyleRange[1]/@AppliedCharacterStyle, current()/ancestor-or-self::CharacterStyleRange[1]/@Position)][1]))"/>
+
+            <xsl:if test=". = key('fragments', $fragment-key)[1]">
+                <xsl:call-template name="fragment">
+                    <xsl:with-param name="fragment-key" select="$fragment-key"/>
+                </xsl:call-template>
+            </xsl:if>
         </xsl:for-each>
     </p>
 </xsl:template>
 
 <!-- Context: Content node -->
 <xsl:template name="fragment">
+    <xsl:param name="fragment-key" />
+
     <span>
         <xsl:attribute name="class">
-            <xsl:value-of select="short-story:get-fragment-class(.)"/>
+            <xsl:value-of select='./ancestor-or-self::CharacterStyleRange[1]/@AppliedCharacterStyle'/>
+            <xsl:if test="./ancestor-or-self::CharacterStyleRange[1]/@Position">
+                <xsl:text> Position-</xsl:text>
+                <xsl:value-of select="./ancestor-or-self::CharacterStyleRange[1]/@Position"/>
+            </xsl:if>
         </xsl:attribute>
 
-        <xsl:for-each select="short-story:fragment-elements(.)">
+        <xsl:for-each select="key('fragments', $fragment-key)">
             <xsl:apply-templates select="."/>
         </xsl:for-each>
     </span>
 </xsl:template>
 
-
-
-<func:function name="short-story:get-section-class">
-    <xsl:param name="n" />
-    <func:result select="$n/ancestor-or-self::ParagraphStyleRange[1]/@AppliedParagraphStyle"/>
-</func:function>
-
-<func:function name="short-story:get-paragraph-class">
-    <xsl:param name="n" />
-    <func:result select="short-story:get-section-class($n)"/>
-</func:function>
-
-<func:function name="short-story:get-fragment-class">
-    <xsl:param name="n" />
-    <func:result>
-        <xsl:value-of select="$n/ancestor-or-self::CharacterStyleRange[1]/@AppliedCharacterStyle"/>
-        <xsl:if test="$n/ancestor-or-self::CharacterStyleRange[1]/@Position">
-            <xsl:text> Position-</xsl:text>
-            <xsl:value-of select="$n/ancestor-or-self::CharacterStyleRange[1]/@Position"/>
-        </xsl:if>
-    </func:result>
-</func:function>
-
-
-
-<func:function name="short-story:section-anchor">
-    <xsl:param name="n" />
-    <func:result select="($n/ancestor::Story | preceding::Content[short-story:get-section-class(.) != short-story:get-section-class($n)])[position()=last()]"/>
-</func:function>
-
-<func:function name="short-story:section-key">
-    <xsl:param name="n" />
-    <func:result select="generate-id(short-story:section-anchor($n))"/>
-</func:function>
-
-<func:function name="short-story:section-elements">
-    <xsl:param name="n" />
-    <func:result select="key('sections', short-story:section-key($n))"/>
-</func:function>
-
-<func:function name="short-story:section-head">
-    <xsl:param name="n" />
-    <func:result select="$n[count(. | short-story:section-elements(.)[1]) = 1]"/>
-</func:function>
-
-<xsl:key name='sections' match='Content' use='short-story:section-key(.)'/>
-
-
-
-<func:function name="short-story:paragraph-anchor">
-    <xsl:param name="n" />
-    <func:result select="(short-story:section-anchor($n) | $n/preceding::Br)[position()=last()]"/>
-</func:function>
-
-<func:function name="short-story:paragraph-key">
-    <xsl:param name="n" />
-    <func:result select="generate-id(short-story:paragraph-anchor($n))"/>
-</func:function>
-
-<func:function name="short-story:paragraph-elements">
-    <xsl:param name="n" />
-    <func:result select="key('paragraphs', short-story:paragraph-key($n))"/>
-</func:function>
-
-<func:function name="short-story:paragraph-head">
-    <xsl:param name="n" />
-    <func:result select="$n[count(. | short-story:paragraph-elements(.)[1]) = 1]"/>
-</func:function>
-
-<xsl:key name='paragraphs' match='Content' use='short-story:paragraph-key(.)'/>
-
-
-
-<func:function name="short-story:fragment-anchor">
-    <xsl:param name="n" />
-    <func:result select="(short-story:paragraph-anchor($n) | $n/preceding::Content[short-story:get-fragment-class(.) != short-story:get-fragment-class($n)])[position()=last()]"/>
-</func:function>
-
-<func:function name="short-story:fragment-key">
-    <xsl:param name="n" />
-    <func:result select="generate-id(short-story:fragment-anchor($n))"/>
-</func:function>
-
-<func:function name="short-story:fragment-elements">
-    <xsl:param name="n" />
-    <func:result select="key('fragments', short-story:fragment-key($n))"/>
-</func:function>
-
-<func:function name="short-story:fragment-head">
-    <xsl:param name="n" />
-    <func:result select="$n[count(. | short-story:fragment-elements(.)[1]) = 1]"/>
-</func:function>
-
-<xsl:key name='fragments' match='Content' use='short-story:fragment-key(.)'/>
-
-
-
-<func:function name="short-story:get-link-href">
-    <xsl:param name="n" />
-    <func:result select="key('hyperlink_url_destinations', key('hyperlinks', $n/ancestor-or-self::HyperlinkTextSource[1]/@Self)//Destination)/@DestinationURL"/>
-</func:function>
-
+<xsl:key name='sections' match='Content' use='concat(generate-id(./ancestor-or-self::Story[1]), generate-id(./ancestor-or-self::ParagraphStyleRange/preceding::ParagraphStyleRange[@AppliedParagraphStyle != current()/ancestor-or-self::ParagraphStyleRange[1]/@AppliedParagraphStyle][1]))'/>
+<xsl:key name='paragraphs' match='Content' use='concat(generate-id(./ancestor-or-self::Story[1]), generate-id(./preceding::Br[1]))'/>
+<xsl:key name='fragments' match='Content' use='concat(generate-id(./ancestor-or-self::Story[1]), generate-id(./preceding::Br[1]), generate-id(./ancestor-or-self::CharacterStyleRange/preceding::CharacterStyleRange[concat(@AppliedCharacterStyle, @Position) != concat(current()/ancestor-or-self::CharacterStyleRange[1]/@AppliedCharacterStyle, current()/ancestor-or-self::CharacterStyleRange[1]/@Position)][1]))'/>
 <xsl:key name='hyperlinks' match='Hyperlink' use='@Source'/>
 <xsl:key name='hyperlink_url_destinations' match='HyperlinkURLDestination' use='@Self'/>
 
