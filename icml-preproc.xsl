@@ -70,7 +70,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
     generate-id(
         (
             ancestor::Story |
-            preceding::Content[ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle != current()/ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle]
+            preceding::Content[string(ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle) != string(current()/ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle)]
         )[position()=last()]
     )"
 />
@@ -79,7 +79,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
     generate-id(
         (
             ancestor::Story |
-            preceding::Content[ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle != current()/ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle] |
+            preceding::Content[string(ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle) != string(current()/ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle)] |
             preceding::Br
         )[position()=last()]
     )"
@@ -89,10 +89,10 @@ necessary to wrap a container around elements of the same class (e.g. lists).
     generate-id(
         (
             ancestor::Story |
-            preceding::Content[ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle != current()/ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle] |
+            preceding::Content[string(ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle) != string(current()/ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle)] |
             preceding::Br |
-            preceding::Content[ancestor::CharacterStyleRange[1]/@AppliedCharacterStyle != current()/ancestor::CharacterStyleRange[1]/@AppliedCharacterStyle] |
-            preceding::Content[concat('', ancestor::CharacterStyleRange[1]/@Position) != concat('', current()/ancestor::CharacterStyleRange[1]/@Position)]
+            preceding::Content[string(ancestor::CharacterStyleRange[1]/@AppliedCharacterStyle) != string(current()/ancestor::CharacterStyleRange[1]/@AppliedCharacterStyle)] |
+            preceding::Content[string(ancestor::CharacterStyleRange[1]/@Position) != string(current()/ancestor::CharacterStyleRange[1]/@Position)]
         )[position()=last()]
     )"
 />
@@ -112,7 +112,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
                 generate-id(
                     (
                         ancestor::Story |
-                        preceding::Content[ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle != current()/ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle]
+                        preceding::Content[string(ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle) != string(current()/ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle)]
                     )[position()=last()]
                 )"
             />
@@ -125,7 +125,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
                             generate-id(
                                 (
                                     ancestor::Story |
-                                    preceding::Content[ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle != current()/ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle] |
+                                    preceding::Content[string(ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle) != string(current()/ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle)] |
                                     preceding::Br
                                 )[position()=last()]
                             )"
@@ -140,10 +140,10 @@ necessary to wrap a container around elements of the same class (e.g. lists).
                                         generate-id(
                                             (
                                                 ancestor::Story |
-                                                preceding::Content[ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle != current()/ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle] |
+                                                preceding::Content[string(ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle) != string(current()/ancestor::ParagraphStyleRange[1]/@AppliedParagraphStyle)] |
                                                 preceding::Br |
-                                                preceding::Content[ancestor::CharacterStyleRange[1]/@AppliedCharacterStyle != current()/ancestor::CharacterStyleRange[1]/@AppliedCharacterStyle] |
-                                                preceding::Content[concat('', ancestor::CharacterStyleRange[1]/@Position) != concat('', current()/ancestor::CharacterStyleRange[1]/@Position)]
+                                                preceding::Content[string(ancestor::CharacterStyleRange[1]/@AppliedCharacterStyle) != string(current()/ancestor::CharacterStyleRange[1]/@AppliedCharacterStyle)] |
+                                                preceding::Content[string(ancestor::CharacterStyleRange[1]/@Position) != string(current()/ancestor::CharacterStyleRange[1]/@Position)]
                                             )[position()=last()]
                                         )"
                                     />
