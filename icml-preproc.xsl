@@ -85,12 +85,12 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 
 <!-- Context: First Content node of a section -->
 <xsl:template mode="section-start" match="Content">
-    <xsl:variable name="story-id" select="generate-id(ancestor::Story)"/>
+    <xsl:variable name="story" select="ancestor::Story"/>
     <xsl:variable name="section-class" select="ancestor::ParagraphStyleRange/@AppliedParagraphStyle"/>
 
     <section class="{$section-class}">
         <xsl:apply-templates mode="paragraph-start" select=".">
-            <xsl:with-param name="story-id" select="$story-id"/>
+            <xsl:with-param name="story" select="$story"/>
             <xsl:with-param name="section-class" select="$section-class"/>
         </xsl:apply-templates>
     </section>
@@ -98,46 +98,46 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 
 <!-- Context: First Content node of a paragraph -->
 <xsl:template mode="paragraph-start" match="Content">
-    <xsl:param name="story-id" />
+    <xsl:param name="story" />
     <xsl:param name="section-class" />
 
     <xsl:variable name="paragraph-class" select="$section-class"/>
 
     <p class="{$paragraph-class}">
         <xsl:apply-templates mode="span-start" select=".">
-            <xsl:with-param name="story-id" select="$story-id"/>
+            <xsl:with-param name="story" select="$story"/>
             <xsl:with-param name="paragraph-class" select="$paragraph-class"/>
         </xsl:apply-templates>
     </p>
 
     <xsl:apply-templates mode="paragraph-next" select="(following::Br)[1]">
-        <xsl:with-param name="story-id" select="$story-id"/>
+        <xsl:with-param name="story" select="$story"/>
         <xsl:with-param name="section-class" select="$section-class"/>
     </xsl:apply-templates>
 </xsl:template>
 
 <!-- Context: Br node ending previous paragraph -->
 <xsl:template mode="paragraph-next" match="Br">
-    <xsl:param name="story-id" />
+    <xsl:param name="story" />
     <xsl:param name="section-class" />
 
     <xsl:apply-templates mode="paragraph-next" select="(following::Content)[1]">
-        <xsl:with-param name="story-id" select="$story-id"/>
+        <xsl:with-param name="story" select="$story"/>
         <xsl:with-param name="section-class" select="$section-class"/>
     </xsl:apply-templates>
 </xsl:template>
 
 <!-- Context: Content node probably starting next paragraph -->
 <xsl:template mode="paragraph-next" match="Content">
-    <xsl:param name="story-id" />
+    <xsl:param name="story" />
     <xsl:param name="section-class" />
 
     <xsl:if test="
-            $story-id = generate-id(ancestor::Story) and
+            $story = ancestor::Story and
             $section-class = ancestor::ParagraphStyleRange/@AppliedParagraphStyle
         ">
         <xsl:apply-templates mode="paragraph-start" select=".">
-            <xsl:with-param name="story-id" select="$story-id"/>
+            <xsl:with-param name="story" select="$story"/>
             <xsl:with-param name="section-class" select="$section-class"/>
         </xsl:apply-templates>
     </xsl:if>
@@ -145,7 +145,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 
 <!-- Context: First Content node of a span -->
 <xsl:template mode="span-start" match="Content">
-    <xsl:param name="story-id" />
+    <xsl:param name="story" />
     <xsl:param name="paragraph-class" />
 
     <xsl:variable name="span-class">
@@ -158,7 +158,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 
     <span class="{$span-class}">
         <xsl:apply-templates mode="span-build" select=".">
-            <xsl:with-param name="story-id" select="$story-id"/>
+            <xsl:with-param name="story" select="$story"/>
             <xsl:with-param name="paragraph-class" select="$paragraph-class"/>
             <xsl:with-param name="span-class" select="$span-class"/>
         </xsl:apply-templates>
@@ -169,7 +169,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
             following::Content[string(ancestor::CharacterStyleRange/@AppliedCharacterStyle) != string(current()/ancestor::CharacterStyleRange/@AppliedCharacterStyle)] |
             following::Content[string(ancestor::CharacterStyleRange/@Position) != string(current()/ancestor::CharacterStyleRange/@Position)]
         )[1]">
-        <xsl:with-param name="story-id" select="$story-id"/>
+        <xsl:with-param name="story" select="$story"/>
         <xsl:with-param name="paragraph-class" select="$paragraph-class"/>
         <xsl:with-param name="span-class" select="$span-class"/>
     </xsl:apply-templates>
@@ -177,7 +177,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 
 <!-- Context: Content node of a span -->
 <xsl:template mode="span-build" match="Content">
-    <xsl:param name="story-id" />
+    <xsl:param name="story" />
     <xsl:param name="paragraph-class" />
     <xsl:param name="span-class" />
 
@@ -190,7 +190,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
     </xsl:variable>
 
     <xsl:if test="
-            $story-id = generate-id(ancestor::Story) and
+            $story = ancestor::Story and
             $paragraph-class = ancestor::ParagraphStyleRange/@AppliedParagraphStyle and
             $span-class = $current-span-class
         ">
@@ -199,7 +199,7 @@ necessary to wrap a container around elements of the same class (e.g. lists).
         <xsl:apply-templates select="."/>
 
         <xsl:apply-templates mode="span-build" select="(following::Content | following::Br)[1]">
-            <xsl:with-param name="story-id" select="$story-id"/>
+            <xsl:with-param name="story" select="$story"/>
             <xsl:with-param name="paragraph-class" select="$paragraph-class"/>
             <xsl:with-param name="span-class" select="$span-class"/>
         </xsl:apply-templates>
@@ -212,16 +212,16 @@ necessary to wrap a container around elements of the same class (e.g. lists).
 
 <!-- Context: Content node probably starting next span -->
 <xsl:template mode="span-next" match="Content">
-    <xsl:param name="story-id" />
+    <xsl:param name="story" />
     <xsl:param name="paragraph-class" />
 
     <xsl:if test="
-            $story-id = generate-id(ancestor::Story) and
+            $story = ancestor::Story and
             $paragraph-class = ancestor::ParagraphStyleRange/@AppliedParagraphStyle
         ">
 
         <xsl:apply-templates mode="span-start" select=".">
-            <xsl:with-param name="story-id" select="$story-id"/>
+            <xsl:with-param name="story" select="$story"/>
             <xsl:with-param name="paragraph-class" select="$paragraph-class"/>
         </xsl:apply-templates>
     </xsl:if>
