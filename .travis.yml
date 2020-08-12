@@ -1,6 +1,12 @@
-sudo: false
+---
+os: linux
+dist: xenial
+language: minimal
+
 addons:
   apt:
     packages:
-    - xsltproc
+      - xsltproc
+      - libxml2-utils
+
 script: ./test.sh
