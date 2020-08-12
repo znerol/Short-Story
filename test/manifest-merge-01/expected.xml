@@ -1,5 +1,6 @@
-<?xml version="1.0"?>
-<Document><Story Self="ud2">
+<?xml version="1.0" encoding="UTF-8"?>
+<Document>
+  <Story Self="ud2">
     <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Title">
       <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
         <Content>Some Text</Content>
@@ -42,7 +43,8 @@
         <Content>Nis aribusciet aliquam volorum voluptation pelecearume ne volores eceatur? Quiandaest ipicimo dunt eiunt entus conest doloris doluptasi ut iligeni simporae plabo. Imil illab incipis imenda consedi deriant veraece</Content>
       </CharacterStyleRange>
     </ParagraphStyleRange>
-  </Story><Story Self="ud2">
+  </Story>
+  <Story Self="ud2">
     <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/Factbox Title">
       <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
         <Content>some facts</Content>
@@ -60,4 +62,5 @@
         <Content>Sequae ped ea non est, illatusam, quam haribus.</Content>
       </CharacterStyleRange>
     </ParagraphStyleRange>
-  </Story></Document>
+  </Story>
+</Document>

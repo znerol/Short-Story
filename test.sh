@@ -13,7 +13,7 @@ short_story_run_test() {
     stylesheet="$directory/stylesheet.xsl"
     result="$(mktemp --tmpdir short-story-test.XXXXXXXXXX)"
 
-    xsltproc -o "$result" "$stylesheet" "$fixture"
+    xsltproc "$stylesheet" "$fixture" | xmllint --format --encode UTF-8 --output "$result" -
 
     diff -u "$result" "$expected" && echo "ok" && rm -f "$result"
 }

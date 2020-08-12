@@ -4,7 +4,6 @@
     <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/$ID/NormalParagraphStyle">
       <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
         <Content>this text</Content>
-        
         <Content>was modified</Content>
         <Content> once</Content>
       </CharacterStyleRange>
