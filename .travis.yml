@@ -1,26 +1,31 @@
 ---
 os: linux
-dist: xenial
 
 jobs:
   include:
     - name: Cli xsltproc
-      language: minimal
-      apt:
-        packages:
-          - xsltproc
-          - libxml2-utils
+      dist: xenial
+      language: shell
+      addons:
+        apt:
+          packages:
+            - xsltproc
+            - libxml2-utils
       script: ./test.sh
 
     - name: Firefox
-      language: javascript
+      dist: bionic
+      language: node_js
+      node_js: lts/*
       addons:
         firefox: latest
       install: npm install karma karma-firefox-launcher karma-mocha karma-chai mocha chai
       script: npx karma start --single-run --browsers FirefoxHeadless karma.conf.js
 
     - name: Chrome
-      language: javascript
+      dist: bionic
+      language: node_js
+      node_js: lts/*
       addons:
         chrome: stable
       install: npm install karma karma-chrome-launcher karma-mocha karma-chai mocha chai
