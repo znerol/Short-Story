@@ -3,8 +3,18 @@ os: linux
 
 jobs:
   include:
-    - name: Cli xsltproc
+    - name: Xenial xsltproc
       dist: xenial
+      language: shell
+      addons:
+        apt:
+          packages:
+            - xsltproc
+            - libxml2-utils
+      script: ./test.sh
+
+    - name: Bionic xsltproc
+      dist: bionic
       language: shell
       addons:
         apt:
