@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document DOMVersion="8.1" Self="d">
+  <Story Self="ud2" TrackChanges="false" StoryTitle="positions" AppliedNamedGrid="n">
+    <InCopyExportOption IncludeGraphicProxies="true" IncludeAllResources="false"/>
+    <StandaloneDocumentPreference PageHeight="841.889763778" PageWidth="595.275590551" TextAreaWidth="523.275590551" TextAreaDepth="0" TextAreaDepthUnit="DepthColumnInches" FrameType="TextFrameType" StoryOrientation="Horizontal" CharacterAki="0" LineAki="6.909448818897637" HorizontalScale="100" VerticalScale="100" TextAreaCharPerLine="52" FacingPages="true"/>
+    <ParagraphStyleRange AppliedParagraphStyle="ParagraphStyle/$ID/NormalParagraphStyle">
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content>CO</Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]" Position="Subscript">
+        <Content>2</Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]">
+        <Content> m</Content>
+      </CharacterStyleRange>
+      <CharacterStyleRange AppliedCharacterStyle="CharacterStyle/$ID/[No character style]" Position="Superscript">
+        <Content>3</Content>
+      </CharacterStyleRange>
+    </ParagraphStyleRange>
+  </Story>
+</Document>
